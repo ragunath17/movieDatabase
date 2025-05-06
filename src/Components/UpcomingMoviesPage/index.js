@@ -2,6 +2,8 @@ import {Component} from 'react'
 import Loader from 'react-loader-spinner'
 import Navbar from '../Navbar'
 import MovieCard from '../MovieCard'
+import Pagination from '../Pagination'
+
 import './index.css'
 
 class UpcomingMovies extends Component {
@@ -22,9 +24,9 @@ class UpcomingMovies extends Component {
     })),
   })
 
-  getUpcomingMovies = async () => {
+  getUpcomingMovies = async (page = 1) => {
     const API_KEY = '0d47fea40f1456909bb9a14f80d7f7fe'
-    const url = `https://api.themoviedb.org/3/movie/upcoming?api_key=${API_KEY}&language=en-US&page=1`
+    const url = `https://api.themoviedb.org/3/movie/upcoming?api_key=${API_KEY}&language=en-US&${page}`
 
     const response = await fetch(url)
     const data = await response.json()
@@ -53,11 +55,15 @@ class UpcomingMovies extends Component {
   )
 
   render() {
-    const {isLoading} = this.state
+    const {isLoading, upcomingMovies} = this.state
     return (
       <div>
         <Navbar />
         {isLoading ? this.renderLoaderView() : this.renderUpcomingMovies()}
+        <Pagination
+          totalPages={upcomingMovies.totalPages}
+          apiCallback={this.getUpcomingMovies}
+        />
       </div>
     )
   }

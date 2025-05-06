@@ -1,6 +1,7 @@
 import Loader from 'react-loader-spinner'
 import Navbar from '../Navbar'
 import MovieCard from '../MovieCard'
+import Pagination from '../Pagination'
 
 import SearchMoviesContext from '../../Context/index'
 
@@ -52,11 +53,12 @@ const SearchedMoviesPage = () => {
     <SearchMoviesContext.Consumer>
       {value => {
         const {searchResponse, onTriggerSearchingQuery} = value
-
+        console.log(searchResponse, onTriggerSearchingQuery)
         return (
           <div>
             <Navbar />
             <div>{renderAllView(value)}</div>
+            <Pagination />
           </div>
         )
       }}

@@ -2,6 +2,7 @@ import {Component} from 'react'
 import Loader from 'react-loader-spinner'
 import Navbar from '../Navbar'
 import MovieCard from '../MovieCard'
+import Pagination from '../Pagination'
 
 import './index.css'
 
@@ -23,11 +24,11 @@ class HomePage extends Component {
     })),
   })
 
-  getMoviesInfo = async () => {
+  getMoviesInfo = async (page = 1) => {
     const {popularMovies} = this.state
     console.log(popularMovies)
     const API_KEY = '0d47fea40f1456909bb9a14f80d7f7fe'
-    const url = `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=en-US&page=1`
+    const url = `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=en-US&${page}`
 
     const response = await fetch(url)
     const data = await response.json()
@@ -57,12 +58,16 @@ class HomePage extends Component {
   )
 
   render() {
-    const {isLoading} = this.state
+    const {isLoading, popularMovies} = this.state
 
     return (
       <div className="home-bg-container">
         <Navbar />
         {isLoading ? this.renderLoaderView() : this.renderPopularMovies()}
+        <Pagination
+          totalPages={popularMovies.totalPages}
+          apiCallback={this.getMoviesInfo}
+        />
       </div>
     )
   }

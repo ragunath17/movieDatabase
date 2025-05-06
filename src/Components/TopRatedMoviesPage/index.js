@@ -2,6 +2,8 @@ import {Component} from 'react'
 import Loader from 'react-loader-spinner'
 import Navbar from '../Navbar'
 import MovieCard from '../MovieCard'
+import Pagination from '../Pagination'
+
 import './index.css'
 
 class TopRatedMovies extends Component {
@@ -22,9 +24,9 @@ class TopRatedMovies extends Component {
     })),
   })
 
-  getTopRatedMovies = async () => {
+  getTopRatedMovies = async (page = 1) => {
     const API_KEY = '0d47fea40f1456909bb9a14f80d7f7fe'
-    const url = `https://api.themoviedb.org/3/movie/top_rated?api_key=${API_KEY}&language=en-US&page=1`
+    const url = `https://api.themoviedb.org/3/movie/top_rated?api_key=${API_KEY}&language=en-US&${page}`
 
     const response = await fetch(url)
     const data = await response.json()
@@ -53,11 +55,15 @@ class TopRatedMovies extends Component {
   }
 
   render() {
-    const {isLoading} = this.state
+    const {isLoading, topRatedMovies} = this.state
     return (
       <div className="top-rated-bg-container">
         <Navbar />
         {isLoading ? this.renderLoaderView() : this.renderTopRatedMovies()}
+        <Pagination
+          totalPages={topRatedMovies.totalPages}
+          apiCallback={this.getTopRatedMovies}
+        />
       </div>
     )
   }
